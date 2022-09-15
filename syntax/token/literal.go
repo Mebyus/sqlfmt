@@ -93,6 +93,8 @@ var Literal = [...]string{
 	Do:         "DO",
 	References: "REFERENCES",
 	Sequence:   "SEQUENCE",
+	Temporary:  "TEMPORARY",
+	Temp:       "TEMP",
 
 	LineComment:      "<LINECOM>",
 	MultiLineComment: "<MULTCOM>",

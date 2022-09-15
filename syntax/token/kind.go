@@ -95,6 +95,8 @@ const (
 	Do
 	References
 	Sequence
+	Temporary
+	Temp
 
 	endKeyword
 	noStaticLiteral
