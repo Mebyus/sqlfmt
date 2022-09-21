@@ -1,6 +1,9 @@
 package ast
 
-import "github.com/mebyus/sqlfmt/syntax/token"
+import (
+	"github.com/mebyus/sqlfmt/syntax/ast/statement"
+	"github.com/mebyus/sqlfmt/syntax/token"
+)
 
 type Statement any
 
@@ -15,9 +18,17 @@ type CreateTableStatement struct {
 	Tablespace *token.Token
 }
 
+// <ColumnCommentStatement> = "COMMENT" "ON" "COLUMN" <TableName> "." <Identifier>
+// "IS" <String> ";"
 type ColumnCommentStatement struct {
 	TableName TableName
 	Name      token.Token
+	Comment   token.Token
+}
+
+// <TableCommentStatement> = "COMMENT" "ON" "TABLE" <TableName> "IS" <String> ";"
+type TableCommentStatement struct {
+	TableName TableName
 	Comment   token.Token
 }
 
@@ -46,6 +57,29 @@ type ColumnSpecifier struct {
 
 type ConstraintSpecifier struct {
 	Name token.Token
+}
+
+type Error struct {
+	// Index of token which produced an error inside
+	// statement's list of tokens
+	Index int
+
+	// Token which produced error upon parsing a statement
+	Token token.Token
+
+	// Kind of statement which parser was trying to parse and failed
+	Statement statement.Kind
+}
+
+type FlawedStatement struct {
+	Error Error
+
+	// List of tokens which failed to produce a valid statement
+	Tokens []token.Token
+}
+
+type UnknownStatement struct {
+	Tokens []token.Token
 }
 
 type DefaultClause struct {

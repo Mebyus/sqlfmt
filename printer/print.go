@@ -10,5 +10,7 @@ func (p *Printer) writeStatement(stmt ast.Statement) {
 		p.writeLineComment(s)
 	case ast.ColumnCommentStatement:
 		p.writeColumnCommentStatement(s)
+	case ast.TableCommentStatement:
+		p.writeTableCommentStatement(s)
 	}
 }

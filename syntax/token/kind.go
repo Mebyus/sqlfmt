@@ -111,6 +111,10 @@ const (
 	Illegal
 )
 
+func (kind Kind) String() string {
+	return Literal[kind]
+}
+
 func (kind Kind) IsKeyword() bool {
 	return beginKeyword < kind && kind < endKeyword
 }

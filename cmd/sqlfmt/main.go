@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mebyus/sqlfmt/syntax/scanner"
-	"github.com/mebyus/sqlfmt/syntax/token"
+	"github.com/mebyus/sqlfmt/printer"
+	"github.com/mebyus/sqlfmt/syntax/parser"
 )
 
 func fatal(v any) {
@@ -22,15 +22,12 @@ func main() {
 	}
 
 	filename := flag.Arg(0)
-	s, err := scanner.FromFile(filename)
+	stmts, err := parser.ParseFile(filename)
 	if err != nil {
 		fatal(err)
 	}
-	for {
-		tok := s.Scan()
-		fmt.Println(tok.String())
-		if tok.Kind == token.EOF {
-			break
-		}
+	err = printer.Print(stmts)
+	if err != nil {
+		fatal(err)
 	}
 }
