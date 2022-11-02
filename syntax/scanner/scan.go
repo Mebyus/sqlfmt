@@ -7,6 +7,13 @@ import (
 )
 
 func (s *Scanner) Scan() token.Token {
+	tok := s.scan()
+	tok.Index = s.index
+	s.index++
+	return tok
+}
+
+func (s *Scanner) scan() token.Token {
 	if s.c == eof {
 		return s.createToken(token.EOF)
 	}
@@ -34,6 +41,10 @@ func (s *Scanner) Scan() token.Token {
 
 	if s.c == '-' && s.next == '-' {
 		return s.scanLineComment()
+	}
+
+	if s.c == '/' && s.next == '*' {
+		return s.scanMultiLineComment()
 	}
 
 	return s.scanOther()
@@ -146,13 +157,31 @@ func (s *Scanner) scanNumber() (tok token.Token) {
 }
 
 func (s *Scanner) scanLineComment() (tok token.Token) {
-	tok.Kind = token.Comment
 	tok.Pos = s.pos
 
 	for s.c != eof && s.c != '\n' {
 		s.store()
 	}
 
+	tok.Kind = token.LineComment
+	tok.Lit = s.collect()
+	return
+}
+
+func (s *Scanner) scanMultiLineComment() (tok token.Token) {
+	tok.Pos = s.pos
+
+	for s.c != eof && (s.c != '*' && s.next != '/') {
+		s.store()
+	}
+
+	if s.c == eof {
+		tok.Kind = token.Illegal
+	} else {
+		tok.Kind = token.MultiLineComment
+		s.store() // consume *
+		s.store() // consume /
+	}
 	tok.Lit = s.collect()
 	return
 }

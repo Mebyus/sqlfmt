@@ -12,6 +12,7 @@ import (
 type Parser struct {
 	scanner *scanner.Scanner
 	stmts   []ast.Statement
+	comms   []ast.Comment
 
 	// token at current Parser position
 	tok token.Token

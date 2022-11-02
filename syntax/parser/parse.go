@@ -73,6 +73,8 @@ func (p *Parser) parseStatement() (err error) {
 		return p.parseCommentStatement()
 	case token.LineComment:
 		return p.parseLineComment()
+	case token.MultiLineComment:
+		return p.parseMultiLineComment()
 	default:
 		p.consumeUnknownStatement()
 		return nil

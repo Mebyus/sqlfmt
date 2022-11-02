@@ -25,6 +25,9 @@ type Scanner struct {
 
 	// Scanner position inside source text
 	pos token.Pos
+
+	// number of tokens emitted before the one being scanned
+	index int
 }
 
 func FromBytes(b []byte) (s *Scanner) {

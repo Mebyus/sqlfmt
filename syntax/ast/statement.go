@@ -93,6 +93,8 @@ type TypeSpecifier struct {
 type Expression struct {
 }
 
-type LineComment struct {
+// <Comment> = <LineComment> | <MultiLineComment>
+type Comment struct {
+	// Token.Kind is an LineComment or MultiLineComment
 	Content token.Token
 }

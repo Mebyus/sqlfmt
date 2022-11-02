@@ -4,7 +4,11 @@ import "fmt"
 
 type Token struct {
 	Kind Kind
-	Pos  Pos
+
+	// Number of tokens emitted by a stream before this one
+	Index int
+
+	Pos Pos
 
 	// Not empty only for tokens which can have
 	// arbitrary literal
