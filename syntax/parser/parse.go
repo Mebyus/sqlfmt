@@ -7,12 +7,13 @@ import (
 	"github.com/mebyus/sqlfmt/syntax/token"
 )
 
-func (p *Parser) Parse() (stmts []ast.Statement, err error) {
+func (p *Parser) Parse() (file ast.SQLFile, err error) {
 	err = p.parse()
 	if err != nil {
 		return
 	}
-	stmts = p.stmts
+	file.Statements = p.stmts
+	file.Comments = p.comms
 	return
 }
 
@@ -81,10 +82,11 @@ func (p *Parser) parseStatement() (err error) {
 	}
 }
 
-func (p *Parser) consume(kind token.Kind) error {
+func (p *Parser) consume(kind token.Kind) (token.Token, error) {
 	if p.tok.Kind == kind {
+		tok := p.tok
 		p.advance()
-		return nil
+		return tok, nil
 	}
-	return fmt.Errorf("expected [ %v ], got [ %v ]", kind, p.tok.String())
+	return token.Token{}, fmt.Errorf("expected [ %v ], got [ %v ]", kind, p.tok.String())
 }

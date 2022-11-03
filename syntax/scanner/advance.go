@@ -3,7 +3,7 @@ package scanner
 const (
 	eof      = -1
 	prefetch = 2
-	nonASCII = 128
+	nonASCII = 1 << 7
 )
 
 func (s *Scanner) advance() {

@@ -69,26 +69,26 @@ func FromFile(filename string) (p *Parser, err error) {
 	return
 }
 
-func ParseBytes(b []byte) (stmts []ast.Statement, err error) {
+func ParseBytes(b []byte) (file ast.SQLFile, err error) {
 	p := FromBytes(b)
-	stmts, err = p.Parse()
+	file, err = p.Parse()
 	return
 }
 
-func ParseFile(filename string) (stmts []ast.Statement, err error) {
+func ParseFile(filename string) (file ast.SQLFile, err error) {
 	p, err := FromFile(filename)
 	if err != nil {
 		return
 	}
-	stmts, err = p.Parse()
+	file, err = p.Parse()
 	return
 }
 
-func Parse(r io.Reader) (stmts []ast.Statement, err error) {
+func Parse(r io.Reader) (file ast.SQLFile, err error) {
 	p, err := FromReader(r)
 	if err != nil {
 		return
 	}
-	stmts, err = p.Parse()
+	file, err = p.Parse()
 	return
 }

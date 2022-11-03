@@ -10,12 +10,10 @@ func (p *Printer) writeStatement(stmt ast.Statement) {
 	switch s := stmt.(type) {
 	case ast.CreateTableStatement:
 		p.writeCreateTableStatement(s)
-	case ast.Comment:
-		p.writeLineComment(s)
-	case ast.ColumnCommentStatement:
-		p.writeColumnCommentStatement(s)
-	case ast.TableCommentStatement:
-		p.writeTableCommentStatement(s)
+	case ast.SetColumnCommentStatement:
+		p.writeSetColumnCommentStatement(s)
+	case ast.SetTableCommentStatement:
+		p.writeSetTableCommentStatement(s)
 	case ast.UnknownStatement:
 		p.writeUnknownStatement(s)
 	case ast.FlawedStatement:

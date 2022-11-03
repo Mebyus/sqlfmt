@@ -3,7 +3,9 @@ package token
 type Kind int
 
 const (
-	EOF Kind = iota
+	empty Kind = iota
+
+	EOF
 
 	Dot              // .
 	Comma            // ,

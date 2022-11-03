@@ -22,11 +22,11 @@ func main() {
 	}
 
 	filename := flag.Arg(0)
-	stmts, err := parser.ParseFile(filename)
+	file, err := parser.ParseFile(filename)
 	if err != nil {
 		fatal(err)
 	}
-	err = printer.Print(stmts)
+	err = printer.Print(file, printer.DefaultOptions)
 	if err != nil {
 		fatal(err)
 	}

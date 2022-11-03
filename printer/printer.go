@@ -5,29 +5,52 @@ import (
 	"os"
 
 	"github.com/mebyus/sqlfmt/syntax/ast"
+	"github.com/mebyus/sqlfmt/syntax/token"
 )
 
 type Printer struct {
 	buf         []byte
 	indentation Indentation
 
-	writer io.Writer
+	// number of tokens already written
+	index int
+
+	// index of next comment to be written
+	next int
+
+	comms []ast.Comment
+
+	options Options
+	keyword []string
+	writer  io.Writer
 }
 
-func Print(stmts []ast.Statement) error {
+func Print(file ast.SQLFile, options Options) error {
 	p := &Printer{
 		writer: os.Stdout,
 		indentation: Indentation{
 			s: "    ",
 		},
+		options: options,
 	}
-	return p.Print(stmts)
+	if options.LowerKeywords {
+		p.keyword = token.LowerKeyword[:]
+	} else {
+		p.keyword = token.Literal[:]
+	}
+	return p.Print(file)
 }
 
-func (p *Printer) Print(stmts []ast.Statement) error {
-	for _, stmt := range stmts {
+func (p *Printer) Print(file ast.SQLFile) error {
+	p.comms = file.Comments
+
+	for _, stmt := range file.Statements {
 		p.writeStatement(stmt)
 	}
+	for i := p.next; i < len(p.comms); i++ {
+		p.writeComment(p.comms[i])
+	}
+
 	_, err := p.writer.Write(p.buf)
 	return err
 }
@@ -36,7 +59,11 @@ func (p *Printer) write(s string) {
 	p.buf = append(p.buf, []byte(s)...)
 }
 
-func (p *Printer) nextLine() {
+func (p *Printer) space() {
+	p.write(" ")
+}
+
+func (p *Printer) nl() {
 	p.write("\n")
 	p.indent()
 }

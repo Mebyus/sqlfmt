@@ -17,12 +17,12 @@ func (p *Printer) writeCreateTableStatement(stmt ast.CreateTableStatement) {
 	p.write(" (")
 
 	p.indentation.Inc()
-	p.nextLine()
+	p.nl()
 	if len(stmt.Columns) > 0 {
 		for i := 0; i < len(stmt.Columns)-1; i++ {
 			p.writeColumnSpecifier(stmt.Columns[i])
 			p.write(",")
-			p.nextLine()
+			p.nl()
 		}
 		last := stmt.Columns[len(stmt.Columns)-1]
 		p.writeColumnSpecifier(last)
@@ -32,13 +32,13 @@ func (p *Printer) writeCreateTableStatement(stmt ast.CreateTableStatement) {
 		for i := 0; i < len(stmt.Constraints)-1; i++ {
 			p.writeConstraintSpecifier(stmt.Constraints[i])
 			p.write(",")
-			p.nextLine()
+			p.nl()
 		}
 		last := stmt.Constraints[len(stmt.Constraints)-1]
 		p.writeConstraintSpecifier(last)
 	}
 	p.indentation.Dec()
-	p.nextLine()
+	p.nl()
 
 	p.write(")")
 	if stmt.Tablespace != nil {
@@ -46,7 +46,7 @@ func (p *Printer) writeCreateTableStatement(stmt ast.CreateTableStatement) {
 		p.writeToken(*stmt.Tablespace)
 	}
 	p.write(";")
-	p.nextLine()
+	p.nl()
 }
 
 func (p *Printer) writeColumnSpecifier(spec ast.ColumnSpecifier) {

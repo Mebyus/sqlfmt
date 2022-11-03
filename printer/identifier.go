@@ -7,12 +7,16 @@ func (p *Printer) writeTableName(name ast.TableName) {
 	case ast.Identifier:
 		p.writeIdentifier(n)
 	case ast.QualifiedIdentifier:
-		p.writeIdentifier(n.SchemaName)
-		p.write(".")
-		p.writeIdentifier(n.RawTableName)
+		p.writeQualifiedIdentifier(n)
 	default:
-		panic("unexpected table name type")
+		panic("unreachable: unexpected table name type")
 	}
+}
+
+func (p *Printer) writeQualifiedIdentifier(ident ast.QualifiedIdentifier) {
+	p.writeIdentifier(ident.SchemaName)
+	p.writeToken(ident.Dot)
+	p.writeIdentifier(ident.RawTableName)
 }
 
 func (p *Printer) writeIdentifier(ident ast.Identifier) {

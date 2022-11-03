@@ -18,18 +18,37 @@ type CreateTableStatement struct {
 	Tablespace *token.Token
 }
 
-// <ColumnCommentStatement> = "COMMENT" "ON" "COLUMN" <TableName> "." <Identifier>
+// <SetColumnCommentStatement> = "COMMENT" "ON" "COLUMN" <TableName> "." <Identifier>
 // "IS" <String> ";"
-type ColumnCommentStatement struct {
-	TableName TableName
-	Name      token.Token
-	Comment   token.Token
+type SetColumnCommentStatement struct {
+	Keywords      SetColumnCommentKeywords
+	Dot           token.Token
+	Semicolon     token.Token
+	TableName     TableName
+	ColumnName    token.Token
+	CommentString token.Token
 }
 
-// <TableCommentStatement> = "COMMENT" "ON" "TABLE" <TableName> "IS" <String> ";"
-type TableCommentStatement struct {
-	TableName TableName
-	Comment   token.Token
+type SetColumnCommentKeywords struct {
+	Comment token.Token
+	On      token.Token
+	Column  token.Token
+	Is      token.Token
+}
+
+// <SetTableCommentStatement> = "COMMENT" "ON" "TABLE" <TableName> "IS" <String> ";"
+type SetTableCommentStatement struct {
+	Keywords      SetTableCommentKeywords
+	Semicolon     token.Token
+	TableName     TableName
+	CommentString token.Token
+}
+
+type SetTableCommentKeywords struct {
+	Comment token.Token
+	On      token.Token
+	Table   token.Token
+	Is      token.Token
 }
 
 // <TableName> = <Identifier> | <QualifiedIdentifier>
@@ -43,6 +62,9 @@ type Identifier struct {
 
 // <QualifiedIdentifier> = <Identifier> "." <Identifier>
 type QualifiedIdentifier struct {
+	// token.Kind is Dot
+	Dot token.Token
+
 	SchemaName   Identifier
 	RawTableName Identifier
 }
