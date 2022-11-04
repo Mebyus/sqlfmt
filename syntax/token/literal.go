@@ -30,7 +30,7 @@ var Literal = [...]string{
 	Delete:     "DELETE",
 	Create:     "CREATE",
 	Truncate:   "TRUNCATE",
-	Alter:      "AITER",
+	Alter:      "ALTER",
 	Set:        "SET",
 	Default:    "DEFAULT",
 	Limit:      "LIMIT",

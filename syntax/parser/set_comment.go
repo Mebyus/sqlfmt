@@ -8,7 +8,7 @@ import (
 	"github.com/mebyus/sqlfmt/syntax/token"
 )
 
-func (p *Parser) parseCommentStatement() error {
+func (p *Parser) parseSetCommentStatement() error {
 	p.kind = statement.Comment
 
 	commentKeyword := p.tok

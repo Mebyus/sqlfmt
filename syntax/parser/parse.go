@@ -44,7 +44,7 @@ func (p *Parser) consumeFlawedStatement() {
 			Token:     errorToken,
 			Statement: p.kind,
 		},
-		Tokens: p.stored,
+		Tokens: p.collect(),
 	})
 }
 
@@ -56,26 +56,28 @@ func (p *Parser) consumeUnknownStatement() {
 		p.advance()
 	}
 	p.stmts = append(p.stmts, ast.UnknownStatement{
-		Tokens: p.stored,
+		Tokens: p.collect(),
 	})
 }
 
-func (p *Parser) startNewStatement() {
+func (p *Parser) collect() []token.Token {
+	tokens := p.stored
+	p.stored = nil
+	return tokens
+}
+
+func (p *Parser) start() {
 	p.stored = nil
 }
 
 func (p *Parser) parseStatement() (err error) {
-	p.startNewStatement()
+	p.start()
 
 	switch p.tok.Kind {
 	case token.Create:
 		return p.parseCreateStatement()
 	case token.Comment:
-		return p.parseCommentStatement()
-	case token.LineComment:
-		return p.parseLineComment()
-	case token.MultiLineComment:
-		return p.parseMultiLineComment()
+		return p.parseSetCommentStatement()
 	default:
 		p.consumeUnknownStatement()
 		return nil

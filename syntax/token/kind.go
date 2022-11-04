@@ -121,6 +121,10 @@ func (kind Kind) IsKeyword() bool {
 	return beginKeyword < kind && kind < endKeyword
 }
 
+func (kind Kind) IsComment() bool {
+	return kind == LineComment || kind == MultiLineComment
+}
+
 func (kind Kind) HasStaticLiteral() bool {
 	return kind < noStaticLiteral
 }

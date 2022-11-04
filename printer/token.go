@@ -31,7 +31,7 @@ func (p *Printer) writeKeyword(kind token.Kind, index int) {
 }
 
 func (p *Printer) writeWithComments(s string, index int) {
-	if p.index == index {
+	if p.index >= index {
 		p.index++
 		p.write(s)
 		return

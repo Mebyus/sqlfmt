@@ -46,6 +46,7 @@ func (p *Printer) Print(file ast.SQLFile) error {
 
 	for _, stmt := range file.Statements {
 		p.writeStatement(stmt)
+		p.nl()
 	}
 	for i := p.next; i < len(p.comms); i++ {
 		p.writeComment(p.comms[i])

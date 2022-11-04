@@ -29,7 +29,19 @@ type Parser struct {
 func (p *Parser) advance() {
 	p.stored = append(p.stored, p.tok)
 	p.tok = p.next
-	p.next = p.scanner.Scan()
+	p.next = p.scanAndSkipComments()
+}
+
+func (p *Parser) scanAndSkipComments() (tok token.Token) {
+	for {
+		tok = p.scanner.Scan()
+		if !tok.Kind.IsComment() {
+			return tok
+		}
+		p.comms = append(p.comms, ast.Comment{
+			Content: tok,
+		})
+	}
 }
 
 func (p *Parser) isEOF() bool {
