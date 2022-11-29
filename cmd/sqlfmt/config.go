@@ -1,6 +1,6 @@
-package printer
+package main
 
-type Options struct {
+type Config struct {
 	LowerKeywords bool
 
 	// use tabs instead of spaces for indentation
@@ -9,9 +9,4 @@ type Options struct {
 	// number of spaces to use for indentation, only takes effect
 	// if UseTabs = false
 	Spaces int
-}
-
-var DefaultOptions = Options{
-	UseTabs: true,
-	Spaces:  4,
 }

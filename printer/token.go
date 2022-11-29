@@ -16,6 +16,9 @@ func (p *Printer) writeToken(tok token.Token) {
 }
 
 func (p *Printer) writeJoinedTokens(tokens []token.Token) {
+	if len(tokens) == 0 {
+		return
+	}
 	for i := 0; i < len(tokens)-1; i++ {
 		tok := tokens[i]
 		p.writeToken(tok)

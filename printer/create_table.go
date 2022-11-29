@@ -2,19 +2,20 @@ package printer
 
 import (
 	"github.com/mebyus/sqlfmt/syntax/ast"
-	"github.com/mebyus/sqlfmt/syntax/token"
 )
 
 func (p *Printer) writeCreateTableStatement(stmt ast.CreateTableStatement) {
-	p.write(token.Literal[token.Create])
-	p.write(" ")
-	if stmt.IsTemporary {
-		p.write("TEMPORARY ")
+	p.writeToken(stmt.Keywords.Create)
+	p.space()
+	if stmt.Temporary != nil {
+		p.writeToken(*stmt.Temporary)
+		p.space()
 	}
-	p.write(token.Literal[token.Table])
-	p.write(" ")
+	p.writeToken(stmt.Keywords.Table)
+	p.space()
 	p.writeTableName(stmt.Name)
-	p.write(" (")
+	p.space()
+	p.writeToken(stmt.LeftParentheses)
 
 	p.indentation.Inc()
 	p.nl()
@@ -40,38 +41,41 @@ func (p *Printer) writeCreateTableStatement(stmt ast.CreateTableStatement) {
 	p.indentation.Dec()
 	p.nl()
 
-	p.write(")")
+	p.writeToken(stmt.RightParentheses)
 	if stmt.Tablespace != nil {
-		p.write(" TABLESPACE ")
+		p.space()
+		p.write("TABLESPACE")
+		p.space()
 		p.writeToken(*stmt.Tablespace)
 	}
-	p.write(";")
+	p.writeToken(stmt.Semicolon)
 	p.nl()
 }
 
 func (p *Printer) writeColumnSpecifier(spec ast.ColumnSpecifier) {
-	p.write(spec.Name.Lit)
-	p.write(" ")
-	if len(spec.Type.Spec) > 0 {
-		for i := 0; i < len(spec.Type.Spec)-1; i++ {
-			p.writeToken(spec.Type.Spec[i])
-			p.write(" ")
-		}
-		last := spec.Type.Spec[len(spec.Type.Spec)-1]
-		p.writeToken(last)
-	}
+	p.writeToken(spec.Name)
+	p.space()
+	p.writeJoinedTokens(spec.Type.Spec)
 	if spec.IsPrimaryKey {
-		p.write(" PRIMARY KEY")
+		p.space()
+		p.write("PRIMARY")
+		p.space()
+		p.write("KEY")
 	}
 	if spec.IsNotNull {
-		p.write(" NOT NULL")
+		p.space()
+		p.write("NOT")
+		p.space()
+		p.write("NULL")
 	}
 	if spec.Default != nil {
-		p.write(" DEFAULT")
+		p.space()
+		p.write("DEFAULT")
 	}
 }
 
 func (p *Printer) writeConstraintSpecifier(spec ast.ConstraintSpecifier) {
-	p.write("CONSTRAINT ")
+	p.write("CONSTRAINT")
+	p.space()
 	p.writeToken(spec.Name)
 }

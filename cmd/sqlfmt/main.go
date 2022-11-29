@@ -15,10 +15,20 @@ func fatal(v any) {
 }
 
 func main() {
+	var config Config
+
+	flag.BoolVar(&config.LowerKeywords, "lower", false, "format keywords in lowercase")
+	flag.BoolVar(&config.UseTabs, "tabs", false, "use tabs instead of spaces for indentation")
+	flag.IntVar(&config.Spaces, "spaces", 4, "number of spaces to use for indentation")
+
 	flag.Parse()
 
 	if flag.NArg() == 0 {
 		fatal("filename was not specified")
+	}
+
+	if config.Spaces < 0 {
+		fatal("spaces cannot be negative")
 	}
 
 	filename := flag.Arg(0)
@@ -26,7 +36,11 @@ func main() {
 	if err != nil {
 		fatal(err)
 	}
-	err = printer.Print(file, printer.DefaultOptions)
+	err = printer.Print(file, printer.Options{
+		LowerKeywords: config.LowerKeywords,
+		UseTabs:       config.UseTabs,
+		Spaces:        config.Spaces,
+	})
 	if err != nil {
 		fatal(err)
 	}

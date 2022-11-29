@@ -8,7 +8,11 @@ import (
 type Statement any
 
 type CreateTableStatement struct {
-	IsTemporary bool
+	Keywords         CreateTableKeywords
+	Temporary        *token.Token
+	LeftParentheses  token.Token
+	RightParentheses token.Token
+	Semicolon        token.Token
 
 	Name        TableName
 	Columns     []ColumnSpecifier
@@ -16,6 +20,11 @@ type CreateTableStatement struct {
 
 	// Token with a tablespace name if any
 	Tablespace *token.Token
+}
+
+type CreateTableKeywords struct {
+	Create token.Token
+	Table  token.Token
 }
 
 // <SetColumnCommentStatement> = "COMMENT" "ON" "COLUMN" <TableName> "." <Identifier>

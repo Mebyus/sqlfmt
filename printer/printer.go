@@ -27,11 +27,9 @@ type Printer struct {
 
 func Print(file ast.SQLFile, options Options) error {
 	p := &Printer{
-		writer: os.Stdout,
-		indentation: Indentation{
-			s: "    ",
-		},
-		options: options,
+		writer:      os.Stdout,
+		indentation: InitIdentation(options.UseTabs, options.Spaces),
+		options:     options,
 	}
 	if options.LowerKeywords {
 		p.keyword = token.LowerKeyword[:]
