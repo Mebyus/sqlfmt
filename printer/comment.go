@@ -8,13 +8,24 @@ import (
 )
 
 func (p *Printer) writeLineComment(comment ast.Comment) {
+	if !comment.Inlined {
+		p.nl()
+	}
+	p.ws(token.LineComment)
 	p.write("-- ")
 	p.write(strings.TrimSpace(comment.Content.Lit[2:]))
 	p.nl()
 }
 
 func (p *Printer) writeMultiLineComment(comment ast.Comment) {
+	if !comment.Inlined {
+		p.nl()
+	}
+	p.ws(token.MultiLineComment)
 	p.write(comment.Content.Lit)
+	if !comment.Inlined {
+		p.nl()
+	}
 }
 
 func (p *Printer) writeComment(comment ast.Comment) {

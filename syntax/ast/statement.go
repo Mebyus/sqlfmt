@@ -27,6 +27,45 @@ type CreateTableKeywords struct {
 	Table  token.Token
 }
 
+type CreateIndexStatement struct {
+	Keywords   CreateIndexKeywords
+	Tablespace *TablespaceClause
+	Where      *WhereClause
+	Semicolon  token.Token
+
+	Name    TableName
+	Columns []IndexColumn
+}
+
+type IndexColumn struct {
+}
+
+type CreateIndexKeywords struct {
+	Create       token.Token
+	Index        token.Token
+	On           token.Token
+	Unique       *token.Token
+	Concurrently *token.Token
+}
+
+type TablespaceClause struct {
+	Keywords TablespaceClauseKeywords
+	Name     Identifier
+}
+
+type TablespaceClauseKeywords struct {
+	Tablespace token.Token
+}
+
+type WhereClause struct {
+	Keywords   WhereClauseKeywords
+	Expression Expression
+}
+
+type WhereClauseKeywords struct {
+	Where token.Token
+}
+
 // <SetColumnCommentStatement> = "COMMENT" "ON" "COLUMN" <TableName> "." <Identifier>
 // "IS" <String> ";"
 type SetColumnCommentStatement struct {
@@ -122,10 +161,14 @@ type TypeSpecifier struct {
 }
 
 type Expression struct {
+	Tokens []token.Token
 }
 
 // <Comment> = <LineComment> | <MultiLineComment>
 type Comment struct {
 	// Token.Kind is an LineComment or MultiLineComment
 	Content token.Token
+
+	// Comment is inlined if it appears on the line which contains non-comment tokens
+	Inlined bool
 }

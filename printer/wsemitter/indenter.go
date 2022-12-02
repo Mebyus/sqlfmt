@@ -1,32 +1,33 @@
-package printer
+package wsemitter
 
 import "strings"
 
-type Indentation struct {
+type Indenter struct {
 	s   string
 	buf []byte
 }
 
-func InitIdentation(useTabs bool, spaces int) Indentation {
+func ConfigureIndenter(useTabs bool, spaces int) Indenter {
 	var s string
 	if useTabs {
 		s = "\t"
 	} else {
 		s = strings.Repeat(" ", spaces)
 	}
-	return Indentation{
+	return Indenter{
 		s: s,
 	}
 }
 
-func (i *Indentation) Inc() {
+func (i *Indenter) Inc() {
 	i.buf = append(i.buf, []byte(i.s)...)
 }
 
-func (i *Indentation) Dec() {
+func (i *Indenter) Dec() {
 	i.buf = i.buf[:len(i.buf)-len(i.s)]
 }
 
-func (i Indentation) Str() string {
+func (i Indenter) Str() string {
 	return string(i.buf)
 }
+

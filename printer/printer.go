@@ -4,13 +4,14 @@ import (
 	"io"
 	"os"
 
+	"github.com/mebyus/sqlfmt/printer/wsemitter"
 	"github.com/mebyus/sqlfmt/syntax/ast"
 	"github.com/mebyus/sqlfmt/syntax/token"
 )
 
 type Printer struct {
-	buf         []byte
-	indentation Indentation
+	buf []byte
+	wse wsemitter.Emitter
 
 	// number of tokens already written
 	index int
@@ -27,9 +28,9 @@ type Printer struct {
 
 func Print(file ast.SQLFile, options Options) error {
 	p := &Printer{
-		writer:      os.Stdout,
-		indentation: InitIdentation(options.UseTabs, options.Spaces),
-		options:     options,
+		writer:  os.Stdout,
+		wse:     wsemitter.ConfigureEmitter(options.UseTabs, options.Spaces),
+		options: options,
 	}
 	if options.LowerKeywords {
 		p.keyword = token.LowerKeyword[:]
@@ -58,15 +59,11 @@ func (p *Printer) write(s string) {
 	p.buf = append(p.buf, []byte(s)...)
 }
 
-func (p *Printer) space() {
-	p.write(" ")
+func (p *Printer) ws(tok token.Kind) {
+	p.write(p.wse.Emit(tok))
 }
 
 func (p *Printer) nl() {
 	p.write("\n")
-	p.indent()
-}
-
-func (p *Printer) indent() {
-	p.write(p.indentation.Str())
+	p.wse.Indent()
 }
