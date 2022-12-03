@@ -99,6 +99,7 @@ const (
 	Sequence
 	Temporary
 	Temp
+	Using
 
 	endKeyword
 	noStaticLiteral
@@ -110,11 +111,15 @@ const (
 	DecimalFloat     // 10.432
 	Identifier       // my_table
 	QuotedIdentifier // "my_table"
-	Illegal
+	Illegal          // 4grevs - would-be-identifier but starts with a digit
 )
 
 func (kind Kind) String() string {
 	return Literal[kind]
+}
+
+func (kind Kind) IsEmpty() bool {
+	return kind == empty
 }
 
 func (kind Kind) IsKeyword() bool {

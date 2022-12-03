@@ -1,12 +1,12 @@
 package parser
 
-func (p *Parser) parseCreateStatement() error {
-	// p.kind = statement.Create
+import "github.com/mebyus/sqlfmt/syntax/token"
 
-	// for !p.isEOF() && p.tok.Kind != token.Semicolon {
-	// 	p.advance()
-	// }
-	// p.advance()
+func (p *Parser) parseCreateStatement() error {
+	if p.next.Kind == token.Index {
+		return p.parseCreateIndexStatement()
+	}
+
 	p.consumeUnknownStatement()
 	return nil
 }

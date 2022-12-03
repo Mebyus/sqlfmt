@@ -38,7 +38,11 @@ func (p *Parser) scanAndSkipComments() (tok token.Token) {
 		if !tok.Kind.IsComment() {
 			return tok
 		}
+
+		inlined := !p.tok.Kind.IsEmpty() && tok.Pos.Line == p.tok.Pos.Line
+
 		p.comms = append(p.comms, ast.Comment{
+			Inlined: inlined,
 			Content: tok,
 		})
 	}
@@ -46,6 +50,14 @@ func (p *Parser) scanAndSkipComments() (tok token.Token) {
 
 func (p *Parser) isEOF() bool {
 	return p.tok.Kind == token.EOF
+}
+
+func (p *Parser) isSemi() bool {
+	return p.tok.Kind == token.Semicolon
+}
+
+func (p *Parser) isIdent() bool {
+	return p.tok.Kind == token.Identifier || p.tok.Kind == token.QuotedIdentifier
 }
 
 func FromReader(r io.Reader) (p *Parser, err error) {

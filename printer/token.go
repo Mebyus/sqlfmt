@@ -3,8 +3,6 @@ package printer
 import "github.com/mebyus/sqlfmt/syntax/token"
 
 func (p *Printer) writeToken(tok token.Token) {
-	p.ws(tok.Kind)
-
 	if tok.Kind.HasStaticLiteral() {
 		if tok.Kind.IsKeyword() {
 			p.writeKeyword(tok.Kind, tok.Index)
@@ -29,13 +27,7 @@ func (p *Printer) writeKeyword(kind token.Kind, index int) {
 }
 
 func (p *Printer) writeWithComments(kind token.Kind, s string, index int) {
-	if p.index >= index {
-		p.index++
-		p.write(s)
-		return
-	}
-
-	for p.index < index {
+	for p.index < index && p.next < len(p.comms) && p.comms[p.next].Content.Index < index {
 		p.writeComment(p.comms[p.next])
 		p.next++
 		p.index++

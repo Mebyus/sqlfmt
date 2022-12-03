@@ -2,7 +2,7 @@ package printer
 
 import "github.com/mebyus/sqlfmt/syntax/ast"
 
-func (p *Printer) writeTableName(name ast.TableName) {
+func (p *Printer) writeTableName(name ast.ObjectName) {
 	switch n := name.(type) {
 	case ast.Identifier:
 		p.writeIdentifier(n)

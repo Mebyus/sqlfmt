@@ -95,6 +95,7 @@ var Literal = [...]string{
 	Sequence:   "SEQUENCE",
 	Temporary:  "TEMPORARY",
 	Temp:       "TEMP",
+	Using:      "USING",
 
 	LineComment:      "<LINECOM>",
 	MultiLineComment: "<MULTCOM>",

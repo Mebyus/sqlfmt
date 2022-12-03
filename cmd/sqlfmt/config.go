@@ -9,4 +9,7 @@ type Config struct {
 	// number of spaces to use for indentation, only takes effect
 	// if UseTabs = false
 	Spaces int
+
+	// guideline (not a hard limit) for output width in characters
+	Width int
 }

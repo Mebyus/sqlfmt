@@ -6,6 +6,7 @@ const (
 	Unknown Kind = iota
 	Create
 	CreateTable
+	CreateIndex
 	Comment
 	ColumnComment
 	TableComment

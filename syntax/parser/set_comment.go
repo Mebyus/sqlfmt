@@ -47,36 +47,12 @@ func (p *Parser) parseSetTableCommentStatement() (stmt ast.SetTableCommentStatem
 
 	tableKeyword := p.tok
 	p.advance() // consume "TABLE"
-	if p.tok.Kind != token.Identifier && p.tok.Kind != token.QuotedIdentifier {
-		return ast.SetTableCommentStatement{},
-			fmt.Errorf("expected identifier, got [ %v ]", p.tok)
-	}
-	firstPartOfName := p.tok
-	p.advance()
 
-	var tableName ast.TableName
-	if p.tok.Kind == token.Dot {
-		dot := p.tok
-		p.advance()
-		if p.tok.Kind != token.Identifier && p.tok.Kind != token.QuotedIdentifier {
-			return ast.SetTableCommentStatement{},
-				fmt.Errorf("expected identifier, got [ %v ]", p.tok)
-		}
-		tableName = ast.QualifiedIdentifier{
-			Dot: dot,
-			SchemaName: ast.Identifier{
-				Token: firstPartOfName,
-			},
-			RawTableName: ast.Identifier{
-				Token: p.tok,
-			},
-		}
-		p.advance()
-	} else {
-		tableName = ast.Identifier{
-			Token: firstPartOfName,
-		}
+	tableName, err := p.parseObjectName()
+	if err != nil {
+		return ast.SetTableCommentStatement{}, err
 	}
+
 	isKeyword, err := p.consume(token.Is)
 	if err != nil {
 		return ast.SetTableCommentStatement{}, err
@@ -109,7 +85,7 @@ func (p *Parser) parseSetColumnCommentStatement() (stmt ast.SetColumnCommentStat
 
 	columnKeyword := p.tok
 	p.advance() // consume "COLUMN"
-	if p.tok.Kind != token.Identifier && p.tok.Kind != token.QuotedIdentifier {
+	if !p.isIdent() {
 		return ast.SetColumnCommentStatement{},
 			fmt.Errorf("expected identifier, got [ %v ]", p.tok)
 	}
@@ -121,19 +97,19 @@ func (p *Parser) parseSetColumnCommentStatement() (stmt ast.SetColumnCommentStat
 		return ast.SetColumnCommentStatement{},
 			err
 	}
-	if p.tok.Kind != token.Identifier && p.tok.Kind != token.QuotedIdentifier {
+	if !p.isIdent() {
 		return ast.SetColumnCommentStatement{},
 			fmt.Errorf("expected identifier, got [ %v ]", p.tok)
 	}
 	secondPartOfName := p.tok
 	p.advance()
 
-	var tableName ast.TableName
+	var tableName ast.ObjectName
 	var columnName token.Token
 	if p.tok.Kind == token.Dot {
 		secondDot := p.tok
 		p.advance()
-		if p.tok.Kind != token.Identifier && p.tok.Kind != token.QuotedIdentifier {
+		if !p.isIdent() {
 			return ast.SetColumnCommentStatement{},
 				fmt.Errorf("expected identifier, got [ %v ]", p.tok)
 		}

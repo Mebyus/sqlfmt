@@ -2,7 +2,6 @@ package printer
 
 import (
 	"io"
-	"os"
 
 	"github.com/mebyus/sqlfmt/printer/wsemitter"
 	"github.com/mebyus/sqlfmt/syntax/ast"
@@ -28,7 +27,7 @@ type Printer struct {
 
 func Print(file ast.SQLFile, options Options) error {
 	p := &Printer{
-		writer:  os.Stdout,
+		writer:  options.Writer,
 		wse:     wsemitter.ConfigureEmitter(options.UseTabs, options.Spaces),
 		options: options,
 	}

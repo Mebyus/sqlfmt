@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/mebyus/sqlfmt/syntax/ast"
 	"github.com/mebyus/sqlfmt/syntax/token"
@@ -21,7 +22,7 @@ func (p *Parser) parse() (err error) {
 	for !p.isEOF() {
 		err = p.parseStatement()
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			p.consumeFlawedStatement()
 		}
 	}
@@ -32,7 +33,7 @@ func (p *Parser) consumeFlawedStatement() {
 	errorIndex := len(p.stored)
 	errorToken := p.tok
 
-	for !p.isEOF() && p.tok.Kind != token.Semicolon {
+	for !p.isEOF() && !p.isSemi() {
 		p.advance()
 	}
 	if !p.isEOF() {
@@ -49,7 +50,7 @@ func (p *Parser) consumeFlawedStatement() {
 }
 
 func (p *Parser) consumeUnknownStatement() {
-	for !p.isEOF() && p.tok.Kind != token.Semicolon {
+	for !p.isEOF() && !p.isSemi() {
 		p.advance()
 	}
 	if !p.isEOF() {

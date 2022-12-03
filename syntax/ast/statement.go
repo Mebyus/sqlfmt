@@ -14,7 +14,7 @@ type CreateTableStatement struct {
 	RightParentheses token.Token
 	Semicolon        token.Token
 
-	Name        TableName
+	Name        ObjectName
 	Columns     []ColumnSpecifier
 	Constraints []ConstraintSpecifier
 
@@ -28,16 +28,33 @@ type CreateTableKeywords struct {
 }
 
 type CreateIndexStatement struct {
-	Keywords   CreateIndexKeywords
-	Tablespace *TablespaceClause
-	Where      *WhereClause
-	Semicolon  token.Token
+	Keywords         CreateIndexKeywords
+	Using            *IndexUsingClause
+	Tablespace       *TablespaceClause
+	Where            *WhereClause
+	LeftParentheses  token.Token
+	RightParentheses token.Token
+	Semicolon        token.Token
 
-	Name    TableName
-	Columns []IndexColumn
+	Name      *Identifier
+	TableName ObjectName
+	Columns   []IndexColumn
 }
 
 type IndexColumn struct {
+	Name  Identifier
+	Comma *token.Token
+}
+
+type IndexUsingClause struct {
+	Keywords IndexUsingClauseKeywords
+
+	// token.Kind is Identifier
+	MethodName token.Token
+}
+
+type IndexUsingClauseKeywords struct {
+	Using token.Token
 }
 
 type CreateIndexKeywords struct {
@@ -72,7 +89,7 @@ type SetColumnCommentStatement struct {
 	Keywords      SetColumnCommentKeywords
 	Dot           token.Token
 	Semicolon     token.Token
-	TableName     TableName
+	TableName     ObjectName
 	ColumnName    token.Token
 	CommentString token.Token
 }
@@ -88,7 +105,7 @@ type SetColumnCommentKeywords struct {
 type SetTableCommentStatement struct {
 	Keywords      SetTableCommentKeywords
 	Semicolon     token.Token
-	TableName     TableName
+	TableName     ObjectName
 	CommentString token.Token
 }
 
@@ -99,8 +116,8 @@ type SetTableCommentKeywords struct {
 	Is      token.Token
 }
 
-// <TableName> = <Identifier> | <QualifiedIdentifier>
-type TableName any
+// <ObjectName> = <Identifier> | <QualifiedIdentifier>
+type ObjectName any
 
 // <Identifier> = <RawIdentifier> | <QuotedIdentifier>
 type Identifier struct {

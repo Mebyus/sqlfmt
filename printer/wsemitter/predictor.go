@@ -14,7 +14,7 @@ type Simple struct {
 var DefaultPredictor = &Simple{}
 
 func (s *Simple) Predict(tok token.Kind) WhitespaceKind {
-	if tok == token.LeftParentheses || tok == token.Dot {
+	if tok == token.LeftParentheses || tok == token.Dot || tok == token.DoubleColon {
 		return None
 	}
 	return Space
@@ -26,7 +26,9 @@ func (s *Simple) Override(kind WhitespaceKind, tok token.Kind) WhitespaceKind {
 	if kind == Newline || kind == Indentation {
 		return kind
 	}
-	if tok == token.Comma || tok == token.Semicolon || tok == token.Dot || tok == token.RightParentheses {
+	if tok == token.Comma || tok == token.Semicolon || tok == token.Dot || tok == token.RightParentheses ||
+		tok == token.DoubleColon {
+
 		return None
 	}
 	return kind
