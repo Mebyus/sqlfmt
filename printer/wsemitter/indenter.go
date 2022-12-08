@@ -30,4 +30,3 @@ func (i *Indenter) Dec() {
 func (i Indenter) Str() string {
 	return string(i.buf)
 }
-

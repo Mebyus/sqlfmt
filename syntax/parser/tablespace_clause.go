@@ -1,22 +1,17 @@
 package parser
 
 import (
-	"fmt"
-
 	"github.com/mebyus/sqlfmt/syntax/ast"
 )
 
 func (p *Parser) parseTablespaceClause() (*ast.TablespaceClause, error) {
 	tablespaceKeyword := p.tok
-	p.advance()
+	p.advance() // consume TABLESPACE
 
-	if !p.isIdent() {
-		return nil, fmt.Errorf("expected identifier, got [ %v ]", p.tok)
+	name, err := p.consumeIdentifier()
+	if err != nil {
+		return nil, err
 	}
-	name := ast.Identifier{
-		Token: p.tok,
-	}
-	p.advance()
 
 	clause := &ast.TablespaceClause{
 		Keywords: ast.TablespaceClauseKeywords{

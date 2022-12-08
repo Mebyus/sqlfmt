@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-
 	"github.com/mebyus/sqlfmt/syntax/ast"
 	"github.com/mebyus/sqlfmt/syntax/ast/statement"
 	"github.com/mebyus/sqlfmt/syntax/token"
@@ -60,16 +58,14 @@ func (p *Parser) parseCreateIndexStatement() error {
 	var columns []ast.IndexColumn
 	var column ast.IndexColumn
 	for {
-		if !p.isIdent() {
-			return fmt.Errorf("expected identifier, got [ %v ]", p.tok)
+		name, err := p.consumeIdentifier()
+		if err != nil {
+			return err
 		}
-		column.Name = ast.Identifier{
-			Token: p.tok,
-		}
-		p.advance()
+		column.Name = name
 		columns = append(columns, column)
 
-		if p.tok.Kind != token.Comma {
+		if !p.isComma() {
 			break
 		}
 		tok := p.tok

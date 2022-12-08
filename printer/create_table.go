@@ -90,9 +90,16 @@ func (p *Printer) writeTableConstraint(constraint ast.TableConstraint) {
 	switch c := constraint.(type) {
 	case ast.ForeignKeyConstraint:
 		p.writeForeignKeyConstraint(c)
+	case ast.UniqueConstraint:
+		p.writeUniqueConstraint(c)
 	default:
 		panic(fmt.Sprintf("unreachable: unknown table constraint type %T %v", c, c))
 	}
+}
+
+func (p *Printer) writeUniqueConstraint(unique ast.UniqueConstraint) {
+	p.writeToken(unique.Keywords.Unique)
+	p.writeIdentifierList(unique.Columns)
 }
 
 func (p *Printer) writeForeignKeyConstraint(fk ast.ForeignKeyConstraint) {

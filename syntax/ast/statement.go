@@ -177,8 +177,17 @@ type ConstraintNameClauseKeywords struct {
 	Constraint token.Token
 }
 
-// <TableConstraint> = <ForeignKeyConstraint> |
+// <TableConstraint> = <ForeignKeyConstraint> | <UniqueConstraint>
 type TableConstraint any
+
+type UniqueConstraint struct {
+	Keywords UniqueConstraintKeywords
+	Columns  IdentifierList
+}
+
+type UniqueConstraintKeywords struct {
+	Unique token.Token
+}
 
 type ForeignKeyConstraint struct {
 	Keywords     ForeignKeyConstraintKeywords

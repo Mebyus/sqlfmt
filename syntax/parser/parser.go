@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/mebyus/sqlfmt/syntax/ast"
@@ -59,8 +60,23 @@ func (p *Parser) isSemi() bool {
 	return p.tok.Kind == token.Semicolon
 }
 
+func (p *Parser) isComma() bool {
+	return p.tok.Kind == token.Comma
+}
+
 func (p *Parser) isIdent() bool {
 	return p.tok.Kind == token.Identifier || p.tok.Kind == token.QuotedIdentifier
+}
+
+func (p *Parser) consumeIdentifier() (ast.Identifier, error) {
+	if !p.isIdent() {
+		return ast.Identifier{}, fmt.Errorf("expected identifier, got [ %v ]", p.tok)
+	}
+	ident := ast.Identifier{
+		Token: p.tok,
+	}
+	p.advance()
+	return ident, nil
 }
 
 func FromReader(r io.Reader) (p *Parser, err error) {
