@@ -100,6 +100,7 @@ const (
 	Temporary
 	Temp
 	Using
+	Tablespace
 
 	endKeyword
 	noStaticLiteral

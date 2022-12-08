@@ -9,22 +9,21 @@ type Statement any
 
 type CreateTableStatement struct {
 	Keywords         CreateTableKeywords
-	Temporary        *token.Token
 	LeftParentheses  token.Token
 	RightParentheses token.Token
 	Semicolon        token.Token
 
-	Name        ObjectName
-	Columns     []ColumnSpecifier
-	Constraints []ConstraintSpecifier
+	Name       ObjectName
+	Properties []TablePropertySpecifier
 
-	// Token with a tablespace name if any
-	Tablespace *token.Token
+	Tablespace *TablespaceClause
 }
 
 type CreateTableKeywords struct {
-	Create token.Token
-	Table  token.Token
+	Create    token.Token
+	Table     token.Token
+	Temporary *token.Token
+	Temp      *token.Token
 }
 
 type CreateIndexStatement struct {
@@ -134,16 +133,76 @@ type QualifiedIdentifier struct {
 	RawTableName Identifier
 }
 
+type TablePropertySpecifier struct {
+	Comma    *token.Token
+	Property TableProperty
+}
+
+// <TableProperty> = <ColumnSpecifier> | <ConstraintSpecifier>
+type TableProperty any
+
 type ColumnSpecifier struct {
-	IsNotNull    bool
-	IsPrimaryKey bool
-	Name         token.Token
-	Type         TypeSpecifier
-	Default      *DefaultClause
+	Name        Identifier
+	Type        TypeSpecifier
+	Constraints ColumnConstraints
+}
+
+type ColumnConstraints struct {
+	Null       *token.Token
+	NotNull    *NotNullClause
+	PrimaryKey *PrimaryKeyClause
+}
+
+type NotNullClause struct {
+	Not  token.Token
+	Null token.Token
+}
+
+type PrimaryKeyClause struct {
+	Primary token.Token
+	Key     token.Token
 }
 
 type ConstraintSpecifier struct {
-	Name token.Token
+	Name       *ConstraintNameClause
+	Constraint TableConstraint
+}
+
+type ConstraintNameClause struct {
+	Keywords ConstraintNameClauseKeywords
+	Name     Identifier
+}
+
+type ConstraintNameClauseKeywords struct {
+	Constraint token.Token
+}
+
+// <TableConstraint> = <ForeignKeyConstraint> |
+type TableConstraint any
+
+type ForeignKeyConstraint struct {
+	Keywords     ForeignKeyConstraintKeywords
+	Columns      IdentifierList
+	RefTableName ObjectName
+	RefColumns   *IdentifierList
+}
+
+type IdentifierList struct {
+	LeftParentheses  token.Token
+	RightParentheses token.Token
+
+	Elements []IdentifierElement
+}
+
+type IdentifierElement struct {
+	Name  Identifier
+	Comma *token.Token
+}
+
+type ForeignKeyConstraintKeywords struct {
+	Foreign    token.Token
+	Key        token.Token
+	References token.Token
 }
 
 type Error struct {

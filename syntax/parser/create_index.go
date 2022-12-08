@@ -37,7 +37,7 @@ func (p *Parser) parseCreateIndexStatement() error {
 	var usingClause *ast.IndexUsingClause
 	if p.tok.Kind == token.Using {
 		usingKeyword := p.tok
-		p.advance()
+		p.advance() // consume USING
 
 		methodName, err := p.consume(token.Identifier)
 		if err != nil {
@@ -74,7 +74,7 @@ func (p *Parser) parseCreateIndexStatement() error {
 		}
 		tok := p.tok
 		column.Comma = &tok
-		p.advance()
+		p.advance() // consume ","
 	}
 
 	rightParentheses, err := p.consume(token.RightParentheses)
@@ -85,7 +85,7 @@ func (p *Parser) parseCreateIndexStatement() error {
 	var whereClause *ast.WhereClause
 	if p.tok.Kind == token.Where {
 		whereKeyword := p.tok
-		p.advance()
+		p.advance() // consume WHERE
 
 		expression, err := p.parseExpression()
 		if err != nil {

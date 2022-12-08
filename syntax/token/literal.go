@@ -1,7 +1,6 @@
 package token
 
 var Literal = [...]string{
-	// Non static or empty literals
 	EOF: "<EOF>",
 
 	Plus:             "+",
@@ -96,7 +95,9 @@ var Literal = [...]string{
 	Temporary:  "TEMPORARY",
 	Temp:       "TEMP",
 	Using:      "USING",
+	Tablespace: "TABLESPACE",
 
+	// Non static literals
 	LineComment:      "<LINECOM>",
 	MultiLineComment: "<MULTCOM>",
 	String:           "<STRING>",

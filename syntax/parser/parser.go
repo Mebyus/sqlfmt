@@ -23,6 +23,9 @@ type Parser struct {
 	// kind of statement which is being parsed at current position
 	kind statement.Kind
 
+	// position of first token in current statement
+	pos token.Pos
+
 	stored []token.Token
 }
 

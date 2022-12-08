@@ -9,7 +9,7 @@ import (
 )
 
 func (p *Parser) parseSetCommentStatement() error {
-	p.kind = statement.Comment
+	p.kind = statement.SetComment
 
 	commentKeyword := p.tok
 	p.advance() // consume COMMENT
@@ -43,7 +43,7 @@ func (p *Parser) parseSetCommentStatement() error {
 }
 
 func (p *Parser) parseSetTableCommentStatement() (stmt ast.SetTableCommentStatement, err error) {
-	p.kind = statement.TableComment
+	p.kind = statement.SetTableComment
 
 	tableKeyword := p.tok
 	p.advance() // consume "TABLE"
@@ -81,7 +81,7 @@ func (p *Parser) parseSetTableCommentStatement() (stmt ast.SetTableCommentStatem
 }
 
 func (p *Parser) parseSetColumnCommentStatement() (stmt ast.SetColumnCommentStatement, err error) {
-	p.kind = statement.ColumnComment
+	p.kind = statement.SetColumnComment
 
 	columnKeyword := p.tok
 	p.advance() // consume "COLUMN"

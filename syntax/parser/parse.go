@@ -22,7 +22,7 @@ func (p *Parser) parse() (err error) {
 	for !p.isEOF() {
 		err = p.parseStatement()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
+			fmt.Fprintln(os.Stderr, p.pos, p.kind, err)
 			p.consumeFlawedStatement()
 		}
 	}
@@ -69,6 +69,7 @@ func (p *Parser) collect() []token.Token {
 
 func (p *Parser) start() {
 	p.stored = nil
+	p.pos = p.tok.Pos
 }
 
 func (p *Parser) parseStatement() (err error) {
