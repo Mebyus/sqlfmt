@@ -17,6 +17,9 @@ type Scanner struct {
 	// src reading index
 	i int
 
+	// previous charcode
+	prev int
+
 	// literal buffer
 	buf []byte
 

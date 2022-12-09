@@ -14,6 +14,7 @@ func (s *Scanner) advance() {
 			s.pos.NextCol()
 		}
 	}
+	s.prev = s.c
 	s.c = s.next
 	if s.i < len(s.src) {
 		s.next = int(s.src[s.i])

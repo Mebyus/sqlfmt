@@ -1,27 +1,27 @@
 package scanner
 
-func isLetterOrUnderscore(b int) bool {
-	return ('a' <= b && b <= 'z') || b == '_' || ('A' <= b && b <= 'Z')
+func isLetterOrUnderscore(c int) bool {
+	return isLetter(c) || c == '_'
 }
 
-func isAlphanum(b int) bool {
-	return ('a' <= b && b <= 'z') || b == '_' || ('A' <= b && b <= 'Z') || ('0' <= b && b <= '9')
+func isAlphanum(c int) bool {
+	return isLetterOrUnderscore(c) || isDecimalDigit(c)
 }
 
-func isLetter(b int) bool {
-	return ('a' <= b && b <= 'z') || ('A' <= b && b <= 'Z')
+func isLetter(c int) bool {
+	return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')
 }
 
-func isDecimalDigit(b int) bool {
-	return '0' <= b && b <= '9'
+func isDecimalDigit(c int) bool {
+	return '0' <= c && c <= '9'
 }
 
-func isDecimalDigitOrPeriod(b int) bool {
-	return ('0' <= b && b <= '9') || b == '.'
+func isDecimalDigitOrPeriod(c int) bool {
+	return isDecimalDigit(c) || c == '.'
 }
 
-func isWhitespace(b int) bool {
-	return b == ' ' || b == '\n' || b == '\t' || b == '\r'
+func isWhitespace(c int) bool {
+	return c == ' ' || c == '\n' || c == '\t' || c == '\r'
 }
 
 func stringFromByte(b byte) string {

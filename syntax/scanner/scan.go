@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/mebyus/sqlfmt/syntax/token"
@@ -10,6 +11,7 @@ func (s *Scanner) Scan() token.Token {
 	tok := s.scan()
 	tok.Index = s.index
 	s.index++
+	fmt.Println(tok.String())
 	return tok
 }
 
@@ -112,18 +114,37 @@ func (s *Scanner) scanQuoted() (tok token.Token) {
 func (s *Scanner) scanDecimalNumber() (tok token.Token) {
 	tok.Pos = s.pos
 
-	for s.c != eof && isDecimalDigit(s.c) {
+	scannedOnePeriod := false
+	for s.c != eof && isDecimalDigitOrPeriod(s.c) {
 		s.store()
+		if s.c == '.' {
+			if scannedOnePeriod {
+				break
+			}
+			scannedOnePeriod = true
+		}
 	}
 
 	if isAlphanum(s.c) || s.c == '.' {
+		s.store()
 		s.storeWord()
 		tok.Kind = token.Illegal
 		tok.Lit = s.collect()
 		return
 	}
 
-	tok.Kind = token.DecimalInteger
+	if s.prev == '.' {
+		tok.Kind = token.Illegal
+		tok.Lit = s.collect()
+		return
+	}
+
+	if scannedOnePeriod {
+		tok.Kind = token.DecimalFloat
+	} else {
+		tok.Kind = token.DecimalInteger
+	}
+
 	tok.Lit = s.collect()
 	return
 }
@@ -141,6 +162,10 @@ func (s *Scanner) scanNumber() (tok token.Token) {
 		}
 		s.advance()
 		return
+	}
+
+	if s.next == '.' {
+		return s.scanDecimalNumber()
 	}
 
 	if isAlphanum(s.next) {
@@ -236,6 +261,27 @@ func (s *Scanner) scanOther() token.Token {
 		return s.scanOneByteToken(token.Minus)
 	case '/':
 		return s.scanOneByteToken(token.Slash)
+	case '%':
+		return s.scanOneByteToken(token.Percent)
+	case '=':
+		return s.scanOneByteToken(token.Equal)
+	case '!':
+		if s.next == '=' {
+			return s.scanTwoByteToken(token.NotEqual)
+		}
+		return s.scanIllegalByteToken()
+	case '<':
+		if s.next == '=' {
+			return s.scanTwoByteToken(token.LessEqual)
+		} else if s.next == '>' {
+			return s.scanTwoByteToken(token.NotEqualAlt)
+		}
+		return s.scanOneByteToken(token.Less)
+	case '>':
+		if s.next == '=' {
+			return s.scanTwoByteToken(token.GreaterEqual)
+		}
+		return s.scanOneByteToken(token.Greater)
 	case ':':
 		if s.next == ':' {
 			return s.scanTwoByteToken(token.DoubleColon)

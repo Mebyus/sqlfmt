@@ -3,18 +3,18 @@ package token
 import "fmt"
 
 type Token struct {
-	Kind Kind
+	// Not empty only for tokens which can have
+	// arbitrary literal
+	//
+	// Examples: identifiers, numbers, illegal tokens
+	Lit string
+
+	Pos Pos
 
 	// Number of tokens emitted by a stream before this one
 	Index int
 
-	Pos Pos
-
-	// Not empty only for tokens which can have
-	// arbitrary literal
-	//
-	// Examples: identifiers or numbers
-	Lit string
+	Kind Kind
 }
 
 func (tok *Token) String() string {
