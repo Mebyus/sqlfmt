@@ -196,7 +196,7 @@ func (s *Scanner) scanLineComment() (tok token.Token) {
 func (s *Scanner) scanMultiLineComment() (tok token.Token) {
 	tok.Pos = s.pos
 
-	for s.c != eof && (s.c != '*' && s.next != '/') {
+	for s.c != eof && !(s.c == '*' && s.next == '/') {
 		s.store()
 	}
 
