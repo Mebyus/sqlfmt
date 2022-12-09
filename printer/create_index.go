@@ -9,7 +9,7 @@ func (p *Printer) writeCreateIndexStatement(stmt ast.CreateIndexStatement) {
 		p.writeIdentifier(*stmt.Name)
 	}
 	p.writeToken(stmt.Keywords.On)
-	p.writeTableName(stmt.TableName)
+	p.writeObjectName(stmt.TableName)
 	if stmt.Using != nil {
 		p.writeToken(stmt.Using.Keywords.Using)
 		p.writeToken(stmt.Using.MethodName)
@@ -20,11 +20,15 @@ func (p *Printer) writeCreateIndexStatement(stmt ast.CreateIndexStatement) {
 	}
 	p.writeToken(stmt.RightParentheses)
 	if stmt.Where != nil {
-		p.writeToken(stmt.Where.Keywords.Where)
-		p.writeExpression(stmt.Where.Expression)
+		p.writeWhereClause(*stmt.Where)
 	}
 	p.writeToken(stmt.Semicolon)
 	p.nl()
+}
+
+func (p *Printer) writeWhereClause(clause ast.WhereClause) {
+	p.writeToken(clause.Keywords.Where)
+	p.writeExpression(clause.Expression)
 }
 
 func (p *Printer) writeIndexColumn(column ast.IndexColumn) {

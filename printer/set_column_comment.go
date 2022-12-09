@@ -6,7 +6,7 @@ func (p *Printer) writeSetColumnCommentStatement(stmt ast.SetColumnCommentStatem
 	p.writeToken(stmt.Keywords.Comment)
 	p.writeToken(stmt.Keywords.On)
 	p.writeToken(stmt.Keywords.Column)
-	p.writeTableName(stmt.TableName)
+	p.writeObjectName(stmt.TableName)
 	p.writeToken(stmt.Dot)
 	p.writeToken(stmt.ColumnName)
 	p.writeToken(stmt.Keywords.Is)

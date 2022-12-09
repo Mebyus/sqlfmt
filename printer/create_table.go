@@ -15,11 +15,11 @@ func (p *Printer) writeCreateTableStatement(stmt ast.CreateTableStatement) {
 		p.writeToken(*stmt.Keywords.Temp)
 	}
 	p.writeToken(stmt.Keywords.Table)
-	p.writeTableName(stmt.Name)
+	p.writeObjectName(stmt.Name)
 	p.writeToken(stmt.LeftParentheses)
 
-	p.wse.Inc()
 	p.nl()
+	p.wse.Inc()
 	for _, property := range stmt.Properties {
 		p.writeTablePropertySpecifier(property)
 		p.nl()
@@ -107,7 +107,7 @@ func (p *Printer) writeForeignKeyConstraint(fk ast.ForeignKeyConstraint) {
 	p.writeToken(fk.Keywords.Key)
 	p.writeIdentifierList(fk.Columns)
 	p.writeToken(fk.Keywords.References)
-	p.writeTableName(fk.RefTableName)
+	p.writeObjectName(fk.RefTableName)
 	if fk.RefColumns != nil {
 		p.writeIdentifierList(*fk.RefColumns)
 	}

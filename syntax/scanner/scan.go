@@ -1,7 +1,6 @@
 package scanner
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/mebyus/sqlfmt/syntax/token"
@@ -11,7 +10,6 @@ func (s *Scanner) Scan() token.Token {
 	tok := s.scan()
 	tok.Index = s.index
 	s.index++
-	fmt.Println(tok.String())
 	return tok
 }
 

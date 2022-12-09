@@ -2,14 +2,14 @@ package printer
 
 import "github.com/mebyus/sqlfmt/syntax/ast"
 
-func (p *Printer) writeTableName(name ast.ObjectName) {
+func (p *Printer) writeObjectName(name ast.ObjectName) {
 	switch n := name.(type) {
 	case ast.Identifier:
 		p.writeIdentifier(n)
 	case ast.QualifiedIdentifier:
 		p.writeQualifiedIdentifier(n)
 	default:
-		panic("unreachable: unexpected table name type")
+		panic("unreachable: unexpected object name type")
 	}
 }
 
