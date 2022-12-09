@@ -80,19 +80,9 @@ func (p *Parser) parseCreateIndexStatement() error {
 
 	var whereClause *ast.WhereClause
 	if p.tok.Kind == token.Where {
-		whereKeyword := p.tok
-		p.advance() // consume WHERE
-
-		expression, err := p.parseExpression()
+		whereClause, err = p.parseWhereClause()
 		if err != nil {
 			return err
-		}
-
-		whereClause = &ast.WhereClause{
-			Keywords: ast.WhereClauseKeywords{
-				Where: whereKeyword,
-			},
-			Expression: expression,
 		}
 	}
 

@@ -96,6 +96,7 @@ var Literal = [...]string{
 	Temp:       "TEMP",
 	Using:      "USING",
 	Tablespace: "TABLESPACE",
+	Only:       "ONLY",
 
 	// Non static literals
 	LineComment:      "<LINECOM>",

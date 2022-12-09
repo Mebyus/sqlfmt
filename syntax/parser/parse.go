@@ -80,6 +80,8 @@ func (p *Parser) parseStatement() (err error) {
 		return p.parseCreateStatement()
 	case token.Comment:
 		return p.parseSetCommentStatement()
+	case token.Update:
+		return p.parseUpdateStatement()
 	default:
 		p.consumeUnknownStatement()
 		return nil
