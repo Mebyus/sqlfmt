@@ -11,6 +11,7 @@ var Literal = [...]string{
 	Slash:            "/",
 	Minus:            "-",
 	Percent:          "%",
+	Caret:            "^",
 	Equal:            "=",
 	Greater:          ">",
 	Less:             "<",
@@ -21,6 +22,8 @@ var Literal = [...]string{
 	DoubleColon:      "::",
 	LeftParentheses:  "(",
 	RightParentheses: ")",
+	LeftSquare:       "[",
+	RightSquare:      "]",
 
 	// Keywords
 	Select:     "SELECT",
@@ -46,6 +49,7 @@ var Literal = [...]string{
 	Is:         "IS",
 	In:         "IN",
 	As:         "AS",
+	To:         "TO",
 	Union:      "UNION",
 	All:        "ALL",
 	With:       "WITH",
@@ -66,6 +70,8 @@ var Literal = [...]string{
 	From:       "FROM",
 	Where:      "WHERE",
 	Like:       "LIKE",
+	Ilike:      "ILIKE",
+	Similar:    "SIMILAR",
 	Between:    "BETWEEN",
 	And:        "AND",
 	Or:         "OR",

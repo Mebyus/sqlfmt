@@ -15,6 +15,7 @@ const (
 	Minus            // -
 	Plus             // +
 	Percent          // %
+	Caret            // ^
 	Equal            // =
 	Greater          // >
 	Less             // <
@@ -25,6 +26,8 @@ const (
 	DoubleColon      // ::
 	LeftParentheses  // (
 	RightParentheses // )
+	LeftSquare       // [
+	RightSquare      // ]
 
 	beginKeyword
 
@@ -51,6 +54,7 @@ const (
 	Is
 	In
 	As
+	To
 	Union
 	All
 	With
@@ -71,6 +75,8 @@ const (
 	From
 	Where
 	Like
+	Ilike
+	Similar
 	Between
 	And
 	Or

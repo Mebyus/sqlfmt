@@ -245,6 +245,10 @@ func (s *Scanner) scanOther() token.Token {
 		return s.scanOneByteToken(token.LeftParentheses)
 	case ')':
 		return s.scanOneByteToken(token.RightParentheses)
+	case ']':
+		return s.scanOneByteToken(token.LeftSquare)
+	case '[':
+		return s.scanOneByteToken(token.RightSquare)
 	case '.':
 		return s.scanOneByteToken(token.Dot)
 	case ';':
@@ -261,6 +265,8 @@ func (s *Scanner) scanOther() token.Token {
 		return s.scanOneByteToken(token.Slash)
 	case '%':
 		return s.scanOneByteToken(token.Percent)
+	case '^':
+		return s.scanOneByteToken(token.Caret)
 	case '=':
 		return s.scanOneByteToken(token.Equal)
 	case '!':
