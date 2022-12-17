@@ -18,15 +18,15 @@ func (p *Parser) Parse() (file ast.SQLFile, err error) {
 	return
 }
 
-func (p *Parser) parse() (err error) {
+func (p *Parser) parse() error {
 	for !p.isEOF() {
-		err = p.parseStatement()
+		err := p.parseStatement()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, p.pos, p.kind, err)
+			fmt.Fprintln(os.Stderr, p.pos, p.kind, "::", err)
 			p.consumeFlawedStatement()
 		}
 	}
-	return
+	return nil
 }
 
 func (p *Parser) consumeFlawedStatement() {

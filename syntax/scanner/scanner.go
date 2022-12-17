@@ -44,6 +44,10 @@ func FromBytes(b []byte) (s *Scanner) {
 	return s
 }
 
+func FromString(str string) (s *Scanner) {
+	return FromBytes([]byte(str))
+}
+
 func FromFile(filename string) (s *Scanner, err error) {
 	src, err := os.ReadFile(filename)
 	if err != nil {

@@ -55,6 +55,7 @@ var Literal = [...]string{
 	With:       "WITH",
 	Exists:     "EXISTS",
 	Any:        "ANY",
+	Some:       "SOME",
 	Case:       "CASE",
 	When:       "WHEN",
 	Then:       "THEN",
@@ -103,6 +104,8 @@ var Literal = [...]string{
 	Using:      "USING",
 	Tablespace: "TABLESPACE",
 	Only:       "ONLY",
+	True:       "TRUE",
+	False:      "FALSE",
 
 	// Non static literals
 	LineComment:      "<LINECOM>",

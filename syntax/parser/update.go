@@ -2,10 +2,13 @@ package parser
 
 import (
 	"github.com/mebyus/sqlfmt/syntax/ast"
+	"github.com/mebyus/sqlfmt/syntax/ast/statement"
 	"github.com/mebyus/sqlfmt/syntax/token"
 )
 
 func (p *Parser) parseUpdateStatement() error {
+	p.kind = statement.Update
+
 	updateKeyword := p.tok
 	p.advance() // consume UPDATE
 

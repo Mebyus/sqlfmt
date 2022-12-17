@@ -60,6 +60,7 @@ const (
 	With
 	Exists
 	Any
+	Some
 	Case
 	When
 	Then
@@ -108,6 +109,8 @@ const (
 	Using
 	Tablespace
 	Only
+	True
+	False
 
 	endKeyword
 	noStaticLiteral
@@ -122,22 +125,56 @@ const (
 	Illegal          // 4grevs - would-be-identifier but starts with a digit
 )
 
-func (kind Kind) String() string {
-	return Literal[kind]
+func (k Kind) String() string {
+	return Literal[k]
 }
 
-func (kind Kind) IsEmpty() bool {
-	return kind == empty
+func (k Kind) IsEmpty() bool {
+	return k == empty
 }
 
-func (kind Kind) IsKeyword() bool {
-	return beginKeyword < kind && kind < endKeyword
+func (k Kind) IsKeyword() bool {
+	return beginKeyword < k && k < endKeyword
 }
 
-func (kind Kind) IsComment() bool {
-	return kind == LineComment || kind == MultiLineComment
+func (k Kind) IsComment() bool {
+	return k == LineComment || k == MultiLineComment
 }
 
-func (kind Kind) HasStaticLiteral() bool {
-	return kind < noStaticLiteral
+func (k Kind) HasStaticLiteral() bool {
+	return k < noStaticLiteral
+}
+
+func (k Kind) IsIdentifier() bool {
+	return k == Identifier || k == QuotedIdentifier
+}
+
+func (k Kind) IsLiteral() bool {
+	switch k {
+	case String, DecimalInteger, DecimalFloat, True, False, Null:
+		return true
+	default:
+		return false
+	}
+}
+
+func (k Kind) IsUnaryOperator() bool {
+	switch k {
+	case Plus, Minus, Not:
+		return true
+	default:
+		return false
+	}
+}
+
+func (k Kind) IsBinaryOperator() bool {
+	switch k {
+	case
+		DoubleColon, Caret, Asterisk, Slash, Percent, Plus, Minus, Between, In, Like, Ilike, Less, Greater,
+		Equal, LessEqual, GreaterEqual, NotEqual, NotEqualAlt, Is, And, Or:
+
+		return true
+	default:
+		return false
+	}
 }

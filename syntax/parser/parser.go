@@ -65,7 +65,15 @@ func (p *Parser) isComma() bool {
 }
 
 func (p *Parser) isIdent() bool {
-	return p.tok.Kind == token.Identifier || p.tok.Kind == token.QuotedIdentifier
+	return p.tok.Kind.IsIdentifier()
+}
+
+func (p *Parser) isLit() bool {
+	return p.tok.Kind.IsLiteral()
+}
+
+func (p *Parser) isLeftPar() bool {
+	return p.tok.Kind == token.LeftParentheses
 }
 
 func (p *Parser) consumeIdentifier() (ast.Identifier, error) {
@@ -84,8 +92,7 @@ func FromReader(r io.Reader) (p *Parser, err error) {
 	if err != nil {
 		return
 	}
-	p = FromScanner(s)
-	return
+	return FromScanner(s), nil
 }
 
 func FromScanner(s *scanner.Scanner) (p *Parser) {
@@ -103,19 +110,26 @@ func FromBytes(b []byte) *Parser {
 	return FromScanner(scanner.FromBytes(b))
 }
 
+func FromString(str string) *Parser {
+	return FromScanner(scanner.FromString(str))
+}
+
 func FromFile(filename string) (p *Parser, err error) {
 	s, err := scanner.FromFile(filename)
 	if err != nil {
 		return
 	}
-	p = FromScanner(s)
-	return
+	return FromScanner(s), nil
 }
 
 func ParseBytes(b []byte) (file ast.SQLFile, err error) {
 	p := FromBytes(b)
-	file, err = p.Parse()
-	return
+	return p.Parse()
+}
+
+func ParseString(str string) (file ast.SQLFile, err error) {
+	p := FromString(str)
+	return p.Parse()
 }
 
 func ParseFile(filename string) (file ast.SQLFile, err error) {
@@ -123,8 +137,7 @@ func ParseFile(filename string) (file ast.SQLFile, err error) {
 	if err != nil {
 		return
 	}
-	file, err = p.Parse()
-	return
+	return p.Parse()
 }
 
 func Parse(r io.Reader) (file ast.SQLFile, err error) {
@@ -132,6 +145,5 @@ func Parse(r io.Reader) (file ast.SQLFile, err error) {
 	if err != nil {
 		return
 	}
-	file, err = p.Parse()
-	return
+	return p.Parse()
 }
