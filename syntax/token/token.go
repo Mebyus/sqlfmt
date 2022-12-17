@@ -23,3 +23,8 @@ func (tok *Token) String() string {
 	}
 	return fmt.Sprintf("%-12s%-12s%s", tok.Pos.String(), Literal[tok.Kind], tok.Lit)
 }
+
+func (tok *Token) Erase() {
+	tok.Index = 0
+	tok.Pos = Pos{}
+}

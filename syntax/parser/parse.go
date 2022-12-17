@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/mebyus/sqlfmt/syntax/ast"
+	"github.com/mebyus/sqlfmt/syntax/scanner"
 	"github.com/mebyus/sqlfmt/syntax/token"
 )
 
@@ -95,4 +96,10 @@ func (p *Parser) consume(kind token.Kind) (token.Token, error) {
 		return tok, nil
 	}
 	return token.Token{}, fmt.Errorf("expected [ %v ], got [ %v ]", kind, p.tok.String())
+}
+
+// ParseExpression is a pure function for usage in unit tests
+func ParseExpression(str string) (ast.Expression, error) {
+	p := FromStream(scanner.NewEraser(scanner.FromString(str)))
+	return p.parseExpression()
 }

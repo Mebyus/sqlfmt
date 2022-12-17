@@ -11,9 +11,9 @@ import (
 )
 
 type Parser struct {
-	scanner *scanner.Scanner
-	stmts   []ast.Statement
-	comms   []ast.Comment
+	stream scanner.Stream
+	stmts  []ast.Statement
+	comms  []ast.Comment
 
 	// token at current Parser position
 	tok token.Token
@@ -38,7 +38,7 @@ func (p *Parser) advance() {
 
 func (p *Parser) scanAndSkipComments() (tok token.Token) {
 	for {
-		tok = p.scanner.Scan()
+		tok = p.stream.Scan()
 		if !tok.Kind.IsComment() {
 			return tok
 		}
@@ -95,15 +95,19 @@ func FromReader(r io.Reader) (p *Parser, err error) {
 	return FromScanner(s), nil
 }
 
-func FromScanner(s *scanner.Scanner) (p *Parser) {
+func FromStream(s scanner.Stream) (p *Parser) {
 	p = &Parser{
-		scanner: s,
+		stream: s,
 	}
 
 	// init Parser buffer
 	p.advance()
 	p.advance()
-	return
+	return p
+}
+
+func FromScanner(s *scanner.Scanner) (p *Parser) {
+	return FromStream(s)
 }
 
 func FromBytes(b []byte) *Parser {
