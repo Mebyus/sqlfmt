@@ -3,6 +3,7 @@ package printer
 import (
 	"github.com/mebyus/sqlfmt/syntax/ast"
 	"github.com/mebyus/sqlfmt/syntax/ast/operator"
+	"github.com/mebyus/sqlfmt/syntax/token"
 )
 
 func (p *Printer) writeExpression(expression ast.Expression) {
@@ -61,7 +62,10 @@ func (p *Printer) writeFunctionCallArgument(arg ast.FunctionCallArgument) {
 
 func (p *Printer) writeUnaryExpression(exp ast.UnaryExpression) {
 	p.writeOperator(exp.Operator)
-	p.wse.None()
+	op := exp.Operator.(*operator.Unary)
+	if op.Token.Kind != token.Not {
+		p.wse.None()
+	}
 	p.writeUnaryOperand(exp.UnaryOperand)
 }
 
