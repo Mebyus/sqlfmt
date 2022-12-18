@@ -11,6 +11,8 @@ import (
 )
 
 type Parser struct {
+	options Options
+
 	stream scanner.Stream
 	stmts  []ast.Statement
 	comms  []ast.Comment
@@ -28,6 +30,15 @@ type Parser struct {
 	pos token.Pos
 
 	stored []token.Token
+
+	// number of encountered errors
+	nerr int
+}
+
+func New(options Options) *Parser {
+	p := FromBytes(options.Input)
+	p.options = options
+	return p
 }
 
 func (p *Parser) advance() {

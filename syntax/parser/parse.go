@@ -16,6 +16,7 @@ func (p *Parser) Parse() (file ast.SQLFile, err error) {
 	}
 	file.Statements = p.stmts
 	file.Comments = p.comms
+	file.NumberOfErrors = p.nerr
 	return
 }
 
@@ -23,7 +24,14 @@ func (p *Parser) parse() error {
 	for !p.isEOF() {
 		err := p.parseStatement()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, p.pos, p.kind, "::", err)
+			if p.nerr <= p.options.MaxErrors {
+				fmt.Fprintln(os.Stderr, "error:", p.pos, p.kind, ">>", err)
+			}
+			p.nerr++
+			if !p.options.KeepGoing && p.nerr > p.options.MaxErrors {
+				return fmt.Errorf("too many errors")
+			}
+
 			p.consumeFlawedStatement()
 		}
 	}

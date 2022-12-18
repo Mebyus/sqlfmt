@@ -12,4 +12,18 @@ type Config struct {
 
 	// guideline (not a hard limit) for output width in characters
 	Width int
+
+	// how many errors parser should tolerate before aborting
+	//
+	// if 0 abort after the first one
+	MaxErrors int
+
+	// ignore all parser errors
+	//
+	// if true MaxErrors setting is ignored
+	KeepGoing bool
+
+	OutputFile string
+
+	UseStdout bool
 }

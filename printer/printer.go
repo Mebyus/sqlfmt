@@ -1,7 +1,10 @@
 package printer
 
 import (
+	"fmt"
 	"io"
+	"os"
+	"time"
 
 	"github.com/mebyus/sqlfmt/printer/wsemitter"
 	"github.com/mebyus/sqlfmt/syntax/ast"
@@ -18,6 +21,7 @@ type Printer struct {
 	// index of next comment to be written
 	next int
 
+	stmts []ast.Statement
 	comms []ast.Comment
 
 	options Options
@@ -40,18 +44,25 @@ func Print(file ast.SQLFile, options Options) error {
 }
 
 func (p *Printer) Print(file ast.SQLFile) error {
+	p.stmts = file.Statements
 	p.comms = file.Comments
 
-	for _, stmt := range file.Statements {
+	start := time.Now()
+	p.print()
+	fmt.Fprintln(os.Stderr, "writing took:", time.Since(start))
+
+	_, err := p.writer.Write(p.buf)
+	return err
+}
+
+func (p *Printer) print() {
+	for _, stmt := range p.stmts {
 		p.writeStatement(stmt)
 		p.nl()
 	}
 	for i := p.next; i < len(p.comms); i++ {
 		p.writeComment(p.comms[i])
 	}
-
-	_, err := p.writer.Write(p.buf)
-	return err
 }
 
 func (p *Printer) write(s string) {

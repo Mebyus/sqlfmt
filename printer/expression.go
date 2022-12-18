@@ -26,7 +26,7 @@ func (p *Printer) writeLiteral(lit ast.Literal) {
 func (p *Printer) writeParenthesizedExpression(exp ast.ParenthesizedExpression) {
 	p.writeToken(exp.LeftParentheses)
 	p.writeExpression(exp.Expression)
-	p.writeToken(exp.LeftParentheses)
+	p.writeToken(exp.RightParentheses)
 }
 
 func (p *Printer) writeOperand(operand ast.Operand) {
